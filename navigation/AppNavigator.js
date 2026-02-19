@@ -14,6 +14,8 @@ import UserTypeSelection from '../screens/auth/UserTypeSelection';
 import StudentHomeScreen from '../screens/student/StudentHomeScreen';
 import OpportunityDetailsScreen from '../screens/student/OpportunityDetailsScreen';
 import StudentProfileScreen from '../screens/student/StudentProfileScreen';
+import VolunteerScreen from '../screens/student/VolunteerScreen';
+import FavoritesScreen from '../screens/student/FavoritesScreen';
 
 // Organization Screens
 import OrgDashboardScreen from '../screens/organization/OrgDashboardScreen';
@@ -43,6 +45,20 @@ function StudentTabs() {
         component={StudentHomeScreen}
         options={{
           tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>🏠</Text>,
+        }}
+      />
+      <Tab.Screen
+        name="Explore"
+        component={VolunteerScreen}
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>🧭</Text>,
+        }}
+      />
+      <Tab.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          tabBarIcon: ({ color }) => <Text style={{ fontSize: 24 }}>❤️</Text>,
         }}
       />
       <Tab.Screen

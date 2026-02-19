@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hourly.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Hourly needs your location to show nearby volunteer opportunities and verify your attendance at events."
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -8,6 +8,7 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function ReportsScreen() {
   const [selectedPeriod, setSelectedPeriod] = useState('This Month');
@@ -45,367 +46,446 @@ export default function ReportsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Reports & Analytics</Text>
-        <Text style={styles.subtitle}>Track your impact and engagement</Text>
-      </View>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.periodScroll}
-        contentContainerStyle={styles.periodContent}
-      >
-        {periods.map((period) => (
-          <TouchableOpacity
-            key={period}
-            style={[
-              styles.periodChip,
-              selectedPeriod === period && styles.periodChipSelected,
-            ]}
-            onPress={() => setSelectedPeriod(period)}
-          >
-            <Text
-              style={[
-                styles.periodText,
-                selectedPeriod === period && styles.periodTextSelected,
-              ]}
-            >
-              {period}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>⏱️</Text>
-            <Text style={styles.statNumber}>{stats.totalHours}</Text>
-            <Text style={styles.statLabel}>Total Hours</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>👥</Text>
-            <Text style={styles.statNumber}>{stats.totalVolunteers}</Text>
-            <Text style={styles.statLabel}>Volunteers</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>📋</Text>
-            <Text style={styles.statNumber}>{stats.totalEvents}</Text>
-            <Text style={styles.statLabel}>Events</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statIcon}>📊</Text>
-            <Text style={styles.statNumber}>{stats.avgAttendance}</Text>
-            <Text style={styles.statLabel}>Avg Attendance</Text>
-          </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Reports</Text>
+          <Text style={styles.subtitle}>Track your impact and engagement</Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>🏆 Top Volunteers</Text>
-          {topVolunteers.map((volunteer) => (
-            <View key={volunteer.rank} style={styles.volunteerCard}>
-              <View style={styles.volunteerRank}>
-                <Text style={styles.rankNumber}>#{volunteer.rank}</Text>
-              </View>
-              <View style={styles.volunteerInfo}>
-                <Text style={styles.volunteerName}>{volunteer.name}</Text>
-                <Text style={styles.volunteerHours}>{volunteer.hours} hours</Text>
-              </View>
-              {volunteer.rank <= 3 && (
-                <Text style={styles.medal}>
-                  {volunteer.rank === 1 ? '🥇' : volunteer.rank === 2 ? '🥈' : '🥉'}
+        {/* Period filter tabs */}
+        <View style={styles.periodContainer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.periodContent}
+          >
+            {periods.map((period) => (
+              <TouchableOpacity
+                key={period}
+                style={[
+                  styles.periodChip,
+                  selectedPeriod === period && styles.periodChipSelected,
+                ]}
+                onPress={() => setSelectedPeriod(period)}
+              >
+                <Text
+                  style={[
+                    styles.periodText,
+                    selectedPeriod === period && styles.periodTextSelected,
+                  ]}
+                >
+                  {period}
                 </Text>
-              )}
-            </View>
-          ))}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📊 Event Performance</Text>
-          {eventPerformance.map((event, index) => (
-            <View key={index} style={styles.eventCard}>
-              <Text style={styles.eventName}>{event.event}</Text>
-              <View style={styles.eventStats}>
-                <View style={styles.eventStat}>
-                  <Text style={styles.eventStatLabel}>Volunteers</Text>
-                  <Text style={styles.eventStatValue}>{event.volunteers}</Text>
-                </View>
-                <View style={styles.eventStat}>
-                  <Text style={styles.eventStatLabel}>Total Hours</Text>
-                  <Text style={styles.eventStatValue}>{event.hours}</Text>
-                </View>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Stats Glass Card */}
+          <View style={styles.glassCard}>
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{stats.totalHours}</Text>
+                <Text style={styles.statLabel}>Hours</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{stats.totalVolunteers}</Text>
+                <Text style={styles.statLabel}>Volunteers</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{stats.totalEvents}</Text>
+                <Text style={styles.statLabel}>Events</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{stats.avgAttendance}</Text>
+                <Text style={styles.statLabel}>Avg</Text>
               </View>
             </View>
-          ))}
-        </View>
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>📥 Export Options</Text>
+          {/* Top Volunteers */}
+          <Text style={styles.sectionTitle}>Top Volunteers</Text>
+          <View style={styles.volunteersContainer}>
+            {topVolunteers.map((volunteer) => (
+              <View key={volunteer.rank} style={styles.volunteerCard}>
+                <View style={styles.volunteerLeft}>
+                  <View style={styles.volunteerRank}>
+                    <Text style={styles.rankText}>#{volunteer.rank}</Text>
+                  </View>
+                  <View style={styles.volunteerInfo}>
+                    <Text style={styles.volunteerName}>{volunteer.name}</Text>
+                    <Text style={styles.volunteerHours}>
+                      {volunteer.hours} hours
+                    </Text>
+                  </View>
+                </View>
+                {volunteer.rank <= 3 && (
+                  <Text style={styles.medal}>
+                    {volunteer.rank === 1
+                      ? '🥇'
+                      : volunteer.rank === 2
+                      ? '🥈'
+                      : '🥉'}
+                  </Text>
+                )}
+              </View>
+            ))}
+          </View>
 
-          <TouchableOpacity
-            style={styles.exportButton}
-            onPress={() => handleExport('pdf')}
-          >
-            <Text style={styles.exportIcon}>📄</Text>
-            <View style={styles.exportInfo}>
-              <Text style={styles.exportTitle}>Export as PDF</Text>
-              <Text style={styles.exportSubtitle}>
-                Formatted report for printing
-              </Text>
-            </View>
-          </TouchableOpacity>
+          {/* Event Performance */}
+          <Text style={styles.sectionTitle}>Event Performance</Text>
+          <View style={styles.eventsContainer}>
+            {eventPerformance.map((event, index) => (
+              <View key={index} style={styles.eventCard}>
+                <Text style={styles.eventName}>{event.event}</Text>
+                <View style={styles.eventStats}>
+                  <View style={styles.eventStat}>
+                    <Text style={styles.eventStatValue}>{event.volunteers}</Text>
+                    <Text style={styles.eventStatLabel}>Volunteers</Text>
+                  </View>
+                  <View style={styles.eventStat}>
+                    <Text style={styles.eventStatValue}>{event.hours}</Text>
+                    <Text style={styles.eventStatLabel}>Total Hours</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
 
-          <TouchableOpacity
-            style={styles.exportButton}
-            onPress={() => handleExport('csv')}
-          >
-            <Text style={styles.exportIcon}>📊</Text>
-            <View style={styles.exportInfo}>
-              <Text style={styles.exportTitle}>Export as CSV</Text>
-              <Text style={styles.exportSubtitle}>
-                Raw data for Excel/Sheets
-              </Text>
-            </View>
-          </TouchableOpacity>
+          {/* Export Options */}
+          <Text style={styles.sectionTitle}>Export</Text>
+          <View style={styles.exportContainer}>
+            <TouchableOpacity
+              style={styles.exportButton}
+              onPress={() => handleExport('pdf')}
+            >
+              <View style={styles.exportLeft}>
+                <View style={styles.exportDot} />
+                <View style={styles.exportInfo}>
+                  <Text style={styles.exportTitle}>Export as PDF</Text>
+                  <Text style={styles.exportSubtitle}>
+                    Formatted report for printing
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.exportArrow}>
+                <Text style={styles.exportArrowText}>›</Text>
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.exportButton}
-            onPress={() =>
-              Alert.alert(
-                'Email Report',
-                'Report will be sent to your registered email address.'
-              )
-            }
-          >
-            <Text style={styles.exportIcon}>📧</Text>
-            <View style={styles.exportInfo}>
-              <Text style={styles.exportTitle}>Email Report</Text>
-              <Text style={styles.exportSubtitle}>
-                Send summary to your inbox
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <TouchableOpacity
+              style={styles.exportButton}
+              onPress={() => handleExport('csv')}
+            >
+              <View style={styles.exportLeft}>
+                <View style={[styles.exportDot, styles.exportDotBlue]} />
+                <View style={styles.exportInfo}>
+                  <Text style={styles.exportTitle}>Export as CSV</Text>
+                  <Text style={styles.exportSubtitle}>
+                    Raw data for Excel/Sheets
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.exportArrow}>
+                <Text style={styles.exportArrowText}>›</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.exportButton}
+              onPress={() =>
+                Alert.alert(
+                  'Email Report',
+                  'Report will be sent to your registered email address.'
+                )
+              }
+            >
+              <View style={styles.exportLeft}>
+                <View style={[styles.exportDot, styles.exportDotPurple]} />
+                <View style={styles.exportInfo}>
+                  <Text style={styles.exportTitle}>Email Report</Text>
+                  <Text style={styles.exportSubtitle}>
+                    Send summary to your inbox
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.exportArrow}>
+                <Text style={styles.exportArrowText}>›</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     </View>
-    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bgBody,
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
-    backgroundColor: '#fff',
-    padding: 20,
-    paddingTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 28,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
-  periodScroll: {
-    backgroundColor: '#fff',
-    maxHeight: 60,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+  periodContainer: {
+    paddingVertical: 12,
   },
   periodContent: {
-    padding: 15,
+    paddingHorizontal: spacing.md,
   },
   periodChip: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#f5f5f5',
-    marginRight: 10,
+    paddingHorizontal: 18,
+    paddingVertical: 9,
+    borderRadius: radii.sm,
+    backgroundColor: colors.bgInput,
+    marginRight: 8,
   },
   periodChipSelected: {
-    backgroundColor: '#2196F3',
+    backgroundColor: colors.accentBlack,
   },
   periodText: {
-    color: '#666',
-    fontWeight: '600',
+    color: colors.textSecondary,
+    fontWeight: '500',
+    fontSize: 13,
   },
   periodTextSelected: {
-    color: '#fff',
+    color: '#FFFFFF',
   },
   content: {
     flex: 1,
   },
   contentContainer: {
-    paddingBottom: 30,
+    paddingBottom: 100,
+  },
+  glassCard: {
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    backgroundColor: colors.bgCardGlass,
+    borderRadius: radii.lg,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.03,
+    shadowRadius: 40,
+    elevation: 3,
   },
   statsGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 10,
   },
-  statCard: {
-    backgroundColor: '#fff',
-    width: '48%',
-    margin: '1%',
-    padding: 20,
-    borderRadius: 12,
+  statItem: {
+    flex: 1,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statIcon: {
-    fontSize: 32,
-    marginBottom: 10,
   },
   statNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 24,
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 4,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
-  },
-  section: {
-    margin: 15,
+    fontSize: 11,
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   sectionTitle: {
+    fontFamily: fonts.serif,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
+    color: colors.textPrimary,
+    paddingHorizontal: spacing.md,
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  volunteersContainer: {
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   volunteerCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgCard,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    padding: 14,
+    borderRadius: radii.md,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 1,
+  },
+  volunteerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
   },
   volunteerRank: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#E3F2FD',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(90,75,117,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 15,
+    marginRight: 14,
   },
-  rankNumber: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2196F3',
+  rankText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.accentPurple,
   },
   volunteerInfo: {
     flex: 1,
   },
   volunteerName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 3,
+    fontSize: 15,
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 2,
   },
   volunteerHours: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 13,
+    color: colors.textSecondary,
   },
   medal: {
-    fontSize: 28,
+    fontSize: 24,
+  },
+  eventsContainer: {
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   eventCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 12,
+    backgroundColor: colors.bgCard,
+    padding: 16,
+    borderRadius: radii.md,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 1,
   },
   eventName: {
+    fontFamily: fonts.serif,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '500',
+    color: colors.textPrimary,
     marginBottom: 12,
   },
   eventStats: {
     flexDirection: 'row',
+    gap: 10,
   },
   eventStat: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bgBody,
     padding: 12,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  eventStatLabel: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 5,
+    borderRadius: 16,
   },
   eventStatValue: {
+    fontFamily: fonts.serif,
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2196F3',
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 2,
+  },
+  eventStatLabel: {
+    fontSize: 11,
+    color: colors.textSecondary,
+  },
+  exportContainer: {
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.lg,
   },
   exportButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgCard,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 18,
-    borderRadius: 12,
+    justifyContent: 'space-between',
+    padding: 16,
+    borderRadius: radii.md,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 1,
   },
-  exportIcon: {
-    fontSize: 32,
-    marginRight: 15,
+  exportLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: 14,
+  },
+  exportDot: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.accentPink,
+    opacity: 0.7,
+  },
+  exportDotBlue: {
+    backgroundColor: colors.accentBlue,
+  },
+  exportDotPurple: {
+    backgroundColor: colors.accentPurple,
+    opacity: 0.4,
   },
   exportInfo: {
     flex: 1,
   },
   exportTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 3,
+    fontSize: 15,
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 2,
   },
   exportSubtitle: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
+  },
+  exportArrow: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F2F2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  exportArrowText: {
+    fontSize: 18,
+    color: colors.textSecondary,
   },
 });

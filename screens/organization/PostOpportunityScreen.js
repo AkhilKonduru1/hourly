@@ -9,6 +9,7 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function PostOpportunityScreen({ navigation }) {
   const [title, setTitle] = useState('');
@@ -48,251 +49,264 @@ export default function PostOpportunityScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Post New Opportunity</Text>
-        <Text style={styles.subtitle}>Create a volunteer event for students</Text>
-      </View>
-
-      <View style={styles.form}>
-        <Text style={styles.label}>
-          Event Title <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="e.g., Food Bank Sorting & Packing"
-          value={title}
-          onChangeText={setTitle}
-          placeholderTextColor="#999"
-        />
-
-        <Text style={styles.label}>
-          Description <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Describe the volunteer work and requirements..."
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          numberOfLines={4}
-          placeholderTextColor="#999"
-        />
-
-        <Text style={styles.label}>
-          Category <Text style={styles.required}>*</Text>
-        </Text>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
         <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.categoryScroll}
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          {categories.map((cat) => (
-            <TouchableOpacity
-              key={cat}
-              style={[
-                styles.categoryChip,
-                category === cat && styles.categoryChipSelected,
-              ]}
-              onPress={() => setCategory(cat)}
+          <View style={styles.header}>
+            <Text style={styles.title}>Post Opportunity</Text>
+            <Text style={styles.subtitle}>Create a volunteer event for students</Text>
+          </View>
+
+          <View style={styles.form}>
+            <Text style={styles.label}>
+              Event Title <Text style={styles.required}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g., Food Bank Sorting & Packing"
+              value={title}
+              onChangeText={setTitle}
+              placeholderTextColor={colors.textTertiary}
+            />
+
+            <Text style={styles.label}>
+              Description <Text style={styles.required}>*</Text>
+            </Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="Describe the volunteer work and requirements..."
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              numberOfLines={4}
+              placeholderTextColor={colors.textTertiary}
+            />
+
+            <Text style={styles.label}>
+              Category <Text style={styles.required}>*</Text>
+            </Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.categoryScroll}
             >
-              <Text
-                style={[
-                  styles.categoryText,
-                  category === cat && styles.categoryTextSelected,
-                ]}
+              {categories.map((cat) => (
+                <TouchableOpacity
+                  key={cat}
+                  style={[
+                    styles.categoryChip,
+                    category === cat && styles.categoryChipSelected,
+                  ]}
+                  onPress={() => setCategory(cat)}
+                >
+                  <Text
+                    style={[
+                      styles.categoryText,
+                      category === cat && styles.categoryTextSelected,
+                    ]}
+                  >
+                    {cat}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            <View style={styles.row}>
+              <View style={styles.halfWidth}>
+                <Text style={styles.label}>
+                  Date <Text style={styles.required}>*</Text>
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="YYYY-MM-DD"
+                  value={date}
+                  onChangeText={setDate}
+                  placeholderTextColor={colors.textTertiary}
+                />
+              </View>
+
+              <View style={styles.halfWidth}>
+                <Text style={styles.label}>
+                  Time <Text style={styles.required}>*</Text>
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="9:00 AM - 12:00 PM"
+                  value={time}
+                  onChangeText={setTime}
+                  placeholderTextColor={colors.textTertiary}
+                />
+              </View>
+            </View>
+
+            <View style={styles.row}>
+              <View style={styles.halfWidth}>
+                <Text style={styles.label}>
+                  Duration (hours) <Text style={styles.required}>*</Text>
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="3"
+                  value={duration}
+                  onChangeText={setDuration}
+                  keyboardType="numeric"
+                  placeholderTextColor={colors.textTertiary}
+                />
+              </View>
+
+              <View style={styles.halfWidth}>
+                <Text style={styles.label}>
+                  Volunteer Spots <Text style={styles.required}>*</Text>
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="15"
+                  value={spots}
+                  onChangeText={setSpots}
+                  keyboardType="numeric"
+                  placeholderTextColor={colors.textTertiary}
+                />
+              </View>
+            </View>
+
+            <Text style={styles.label}>
+              Location/Address <Text style={styles.required}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="123 Main St, City, State"
+              value={location}
+              onChangeText={setLocation}
+              placeholderTextColor={colors.textTertiary}
+            />
+
+            <TouchableOpacity
+              style={styles.checkboxContainer}
+              onPress={() => setIsFeatured(!isFeatured)}
+            >
+              <View
+                style={[styles.checkbox, isFeatured && styles.checkboxChecked]}
               >
-                {cat}
-              </Text>
+                {isFeatured && <Text style={styles.checkmark}>✓</Text>}
+              </View>
+              <View style={styles.checkboxLabel}>
+                <Text style={styles.checkboxText}>
+                  Make this a Featured Opportunity
+                </Text>
+                <Text style={styles.checkboxSubtext}>
+                  ⭐ Featured events get 3x more visibility ($25/event)
+                </Text>
+              </View>
             </TouchableOpacity>
-          ))}
+
+            <View style={styles.infoBox}>
+              <Text style={styles.infoTitle}>📱 Check-in Methods</Text>
+              <Text style={styles.infoText}>
+                Students can verify attendance using:
+              </Text>
+              <Text style={styles.infoBullet}>• GPS check-in at location</Text>
+              <Text style={styles.infoBullet}>
+                • QR code scan (we'll provide)
+              </Text>
+              <Text style={styles.infoBullet}>• Organizer signature</Text>
+            </View>
+
+            <TouchableOpacity style={styles.postButton} onPress={handlePost}>
+              <Text style={styles.postButtonText}>Post Opportunity</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-
-        <View style={styles.row}>
-          <View style={styles.halfWidth}>
-            <Text style={styles.label}>
-              Date <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              value={date}
-              onChangeText={setDate}
-              placeholderTextColor="#999"
-            />
-          </View>
-
-          <View style={styles.halfWidth}>
-            <Text style={styles.label}>
-              Time <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="9:00 AM - 12:00 PM"
-              value={time}
-              onChangeText={setTime}
-              placeholderTextColor="#999"
-            />
-          </View>
-        </View>
-
-        <View style={styles.row}>
-          <View style={styles.halfWidth}>
-            <Text style={styles.label}>
-              Duration (hours) <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="3"
-              value={duration}
-              onChangeText={setDuration}
-              keyboardType="numeric"
-              placeholderTextColor="#999"
-            />
-          </View>
-
-          <View style={styles.halfWidth}>
-            <Text style={styles.label}>
-              Volunteer Spots <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="15"
-              value={spots}
-              onChangeText={setSpots}
-              keyboardType="numeric"
-              placeholderTextColor="#999"
-            />
-          </View>
-        </View>
-
-        <Text style={styles.label}>
-          Location/Address <Text style={styles.required}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="123 Main St, City, State"
-          value={location}
-          onChangeText={setLocation}
-          placeholderTextColor="#999"
-        />
-
-        <TouchableOpacity
-          style={styles.checkboxContainer}
-          onPress={() => setIsFeatured(!isFeatured)}
-        >
-          <View style={[styles.checkbox, isFeatured && styles.checkboxChecked]}>
-            {isFeatured && <Text style={styles.checkmark}>✓</Text>}
-          </View>
-          <View style={styles.checkboxLabel}>
-            <Text style={styles.checkboxText}>Make this a Featured Opportunity</Text>
-            <Text style={styles.checkboxSubtext}>
-              ⭐ Featured events get 3x more visibility ($25/event)
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>📱 Check-in Methods</Text>
-          <Text style={styles.infoText}>
-            Students can verify attendance using:
-          </Text>
-          <Text style={styles.infoBullet}>• GPS check-in at location</Text>
-          <Text style={styles.infoBullet}>• QR code scan (we'll provide)</Text>
-          <Text style={styles.infoBullet}>• Organizer signature</Text>
-        </View>
-
-        <TouchableOpacity style={styles.postButton} onPress={handlePost}>
-          <Text style={styles.postButtonText}>Post Opportunity</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgBody,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
     paddingBottom: 40,
   },
   header: {
-    padding: 20,
-    paddingTop: 10,
-    backgroundColor: '#f5f5f5',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.sm,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 28,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
   form: {
-    padding: 20,
+    paddingHorizontal: spacing.md,
   },
   label: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colors.textPrimary,
     marginBottom: 8,
-    marginTop: 15,
+    marginTop: 16,
   },
   required: {
-    color: '#FF5722',
+    color: '#C44536',
   },
   input: {
-    backgroundColor: '#f5f5f5',
-    padding: 15,
-    borderRadius: 10,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    backgroundColor: colors.bgInput,
+    padding: 16,
+    borderRadius: radii.sm,
+    fontSize: 15,
+    color: colors.textPrimary,
   },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
   },
   categoryScroll: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
   categoryChip: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#f5f5f5',
-    marginRight: 10,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderRadius: radii.sm,
+    backgroundColor: colors.bgInput,
+    marginRight: 8,
   },
   categoryChipSelected: {
-    backgroundColor: '#2196F3',
-    borderColor: '#2196F3',
+    backgroundColor: colors.accentBlack,
   },
   categoryText: {
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '500',
+    fontSize: 13,
   },
   categoryTextSelected: {
-    color: '#fff',
+    color: '#FFFFFF',
   },
   row: {
     flexDirection: 'row',
@@ -305,28 +319,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginTop: 20,
-    padding: 15,
-    backgroundColor: '#FFF9C4',
-    borderRadius: 10,
+    padding: 16,
+    backgroundColor: 'rgba(90,75,117,0.08)',
+    borderRadius: radii.md,
   },
   checkbox: {
     width: 24,
     height: 24,
     borderWidth: 2,
-    borderColor: '#FFC107',
-    borderRadius: 6,
+    borderColor: colors.accentPurple,
+    borderRadius: 8,
     marginRight: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   checkboxChecked: {
-    backgroundColor: '#FFC107',
-    borderColor: '#FFC107',
+    backgroundColor: colors.accentPurple,
+    borderColor: colors.accentPurple,
   },
   checkmark: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 14,
     fontWeight: 'bold',
   },
   checkboxLabel: {
@@ -335,47 +349,47 @@ const styles = StyleSheet.create({
   checkboxText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 3,
+    color: colors.textPrimary,
+    marginBottom: 4,
   },
   checkboxSubtext: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   infoBox: {
-    backgroundColor: '#E3F2FD',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: 'rgba(140,166,214,0.12)',
+    padding: 16,
+    borderRadius: radii.md,
     marginTop: 20,
   },
   infoTitle: {
     fontSize: 15,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '600',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   infoText: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
+    color: colors.textSecondary,
+    marginBottom: 6,
   },
   infoBullet: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
     marginLeft: 10,
     marginTop: 3,
   },
   postButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: colors.accentBlack,
     padding: 18,
-    borderRadius: 12,
+    borderRadius: radii.sm,
     alignItems: 'center',
     marginTop: 30,
   },
   postButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
   cancelButton: {
     padding: 18,
@@ -383,7 +397,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   cancelButtonText: {
-    color: '#666',
-    fontSize: 16,
+    color: colors.textSecondary,
+    fontSize: 15,
   },
 });

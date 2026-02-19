@@ -9,6 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import MockMap, { Marker } from '../../components/MockMap';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function OpportunityDetailsScreen({ route, navigation }) {
   const { opportunity } = route.params;
@@ -29,281 +30,309 @@ export default function OpportunityDetailsScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {opportunity.featured && (
-          <View style={styles.featuredBanner}>
-            <Text style={styles.featuredText}>⭐ FEATURED OPPORTUNITY</Text>
-          </View>
-        )}
-
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Text style={styles.title}>{opportunity.title}</Text>
-            <Text style={styles.organization}>{opportunity.organization}</Text>
-            {opportunity.verified && (
-              <View style={styles.verifiedBadge}>
-                <Text style={styles.verifiedText}>✓ Verified Organization</Text>
-              </View>
-            )}
-          </View>
-          <TouchableOpacity
-            onPress={() => setIsBookmarked(!isBookmarked)}
-            style={styles.bookmarkButton}
-          >
-            <Text style={styles.bookmarkIcon}>{isBookmarked ? '❤️' : '🤍'}</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>About This Opportunity</Text>
-          <Text style={styles.description}>{opportunity.description}</Text>
-        </View>
-
-        <View style={styles.detailsGrid}>
-          <View style={styles.detailCard}>
-            <Text style={styles.detailIcon}>📅</Text>
-            <Text style={styles.detailLabel}>Date</Text>
-            <Text style={styles.detailValue}>{opportunity.date}</Text>
-          </View>
-
-          <View style={styles.detailCard}>
-            <Text style={styles.detailIcon}>⏰</Text>
-            <Text style={styles.detailLabel}>Time</Text>
-            <Text style={styles.detailValue}>{opportunity.time}</Text>
-          </View>
-
-          <View style={styles.detailCard}>
-            <Text style={styles.detailIcon}>⏱️</Text>
-            <Text style={styles.detailLabel}>Duration</Text>
-            <Text style={styles.detailValue}>{opportunity.duration} hrs</Text>
-          </View>
-
-          <View style={styles.detailCard}>
-            <Text style={styles.detailIcon}>👥</Text>
-            <Text style={styles.detailLabel}>Spots Left</Text>
-            <Text
-              style={[
-                styles.detailValue,
-                opportunity.spotsAvailable < 5 && styles.lowSpots,
-              ]}
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Card Tag & Bookmark */}
+          <View style={styles.topRow}>
+            <View style={styles.cardTag}>
+              <Text style={styles.cardTagText}>{opportunity.category}</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setIsBookmarked(!isBookmarked)}
+              style={styles.bookmarkButton}
             >
-              {opportunity.spotsAvailable}
-            </Text>
+              <Text style={styles.bookmarkIcon}>
+                {isBookmarked ? '❤️' : '🤍'}
+              </Text>
+            </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.section}>
+          {/* Title */}
+          <Text style={styles.title}>{opportunity.title}</Text>
+          <Text style={styles.organization}>{opportunity.organization}</Text>
+
+          {opportunity.verified && (
+            <View style={styles.verifiedBadge}>
+              <Text style={styles.verifiedText}>✓ Verified Organization</Text>
+            </View>
+          )}
+
+          {/* Details Glass Card */}
+          <View style={styles.glassCard}>
+            <View style={styles.detailRow}>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Date</Text>
+                <Text style={styles.detailValue}>{opportunity.date}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Time</Text>
+                <Text style={styles.detailValue}>{opportunity.time}</Text>
+              </View>
+            </View>
+            <View style={styles.detailRow}>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Duration</Text>
+                <Text style={styles.detailValue}>{opportunity.duration} hrs</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Spots Left</Text>
+                <Text
+                  style={[
+                    styles.detailValue,
+                    opportunity.spotsAvailable < 5 && styles.lowSpots,
+                  ]}
+                >
+                  {opportunity.spotsAvailable}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* About */}
+          <Text style={styles.sectionTitle}>About</Text>
+          <View style={styles.sectionCard}>
+            <Text style={styles.description}>{opportunity.description}</Text>
+          </View>
+
+          {/* Location */}
           <Text style={styles.sectionTitle}>Location</Text>
-          <Text style={styles.address}>📍 {opportunity.address}</Text>
+          <View style={styles.sectionCard}>
+            <Text style={styles.address}>{opportunity.address}</Text>
+            <MockMap
+              style={styles.map}
+              region={{
+                ...opportunity.coordinates,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            >
+              <Marker
+                coordinate={opportunity.coordinates}
+                title={opportunity.location}
+              />
+            </MockMap>
+          </View>
 
-          <MockMap
-            style={styles.map}
-            region={{
-              ...opportunity.coordinates,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
-            }}
-          >
-            <Marker
-              coordinate={opportunity.coordinates}
-              title={opportunity.location}
-            />
-          </MockMap>
-        </View>
-
-        <View style={styles.section}>
+          {/* What to Bring */}
           <Text style={styles.sectionTitle}>What to Bring</Text>
-          <Text style={styles.bulletPoint}>• Comfortable clothes and shoes</Text>
-          <Text style={styles.bulletPoint}>• Water bottle</Text>
-          <Text style={styles.bulletPoint}>• Positive attitude!</Text>
-        </View>
+          <View style={styles.sectionCard}>
+            <Text style={styles.bulletPoint}>• Comfortable clothes and shoes</Text>
+            <Text style={styles.bulletPoint}>• Water bottle</Text>
+            <Text style={styles.bulletPoint}>• Positive attitude!</Text>
+          </View>
 
-        <View style={styles.section}>
+          {/* Check-in Method */}
           <Text style={styles.sectionTitle}>Check-in Method</Text>
-          <View style={styles.checkInBadge}>
+          <View style={styles.checkInCard}>
             <Text style={styles.checkInText}>📱 QR Code Scan at Event</Text>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
 
-      <View style={styles.footer}>
-        <View style={styles.footerInfo}>
-          <Text style={styles.footerHours}>{opportunity.duration} hours</Text>
-          <Text style={styles.footerCategory}>{opportunity.category}</Text>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <View style={styles.footerInfo}>
+            <Text style={styles.footerHours}>{opportunity.duration} hours</Text>
+            <Text style={styles.footerCategory}>{opportunity.category}</Text>
+          </View>
+          <TouchableOpacity style={styles.bookButton} onPress={handleBookSpot}>
+            <Text style={styles.bookButtonText}>Book My Spot</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.bookButton} onPress={handleBookSpot}>
-          <Text style={styles.bookButtonText}>Book My Spot</Text>
-        </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </View>
-    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgBody,
   },
-  scrollContent: {
-    paddingBottom: 100, // Add padding to account for footer
-  },
-  featuredBanner: {
-    backgroundColor: '#FFC107',
-    padding: 10,
-    alignItems: 'center',
-  },
-  featuredText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 13,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerContent: {
+  safeArea: {
     flex: 1,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
+  scrollView: {
+    flex: 1,
   },
-  organization: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 8,
+  scrollContent: {
+    padding: spacing.md,
+    paddingBottom: 100,
   },
-  verifiedBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#E3F2FD',
-    paddingHorizontal: 10,
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  cardTag: {
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    paddingHorizontal: 12,
     paddingVertical: 5,
-    borderRadius: 15,
+    borderRadius: radii.sm,
   },
-  verifiedText: {
-    color: '#2196F3',
-    fontSize: 12,
-    fontWeight: '500',
+  cardTagText: {
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    color: colors.textSecondary,
   },
   bookmarkButton: {
     padding: 5,
   },
   bookmarkIcon: {
+    fontSize: 24,
+  },
+  title: {
+    fontFamily: fonts.serif,
     fontSize: 28,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    lineHeight: 34,
+    marginBottom: 8,
   },
-  section: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+  organization: {
+    fontSize: 15,
+    color: colors.textSecondary,
     marginBottom: 12,
   },
-  description: {
-    fontSize: 15,
-    color: '#666',
-    lineHeight: 22,
+  verifiedBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(90,75,117,0.1)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radii.sm,
+    marginBottom: 20,
   },
-  detailsGrid: {
+  verifiedText: {
+    color: colors.accentPurple,
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  glassCard: {
+    backgroundColor: colors.bgCardGlass,
+    borderRadius: radii.lg,
+    padding: 20,
+    marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.03,
+    shadowRadius: 40,
+    elevation: 3,
+  },
+  detailRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    marginBottom: 16,
   },
-  detailCard: {
-    width: '50%',
-    padding: 10,
-    alignItems: 'center',
-  },
-  detailIcon: {
-    fontSize: 30,
-    marginBottom: 5,
+  detailItem: {
+    flex: 1,
   },
   detailLabel: {
     fontSize: 12,
-    color: '#999',
-    marginBottom: 3,
+    color: colors.textTertiary,
+    marginBottom: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   detailValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontFamily: fonts.serif,
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.textPrimary,
   },
   lowSpots: {
-    color: '#FF5722',
+    color: '#C44536',
+  },
+  sectionTitle: {
+    fontFamily: fonts.serif,
+    fontSize: 18,
+    color: colors.textPrimary,
+    marginBottom: 12,
+  },
+  sectionCard: {
+    backgroundColor: colors.bgCard,
+    borderRadius: radii.md,
+    padding: 20,
+    marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 20,
+    elevation: 2,
+  },
+  description: {
+    fontSize: 15,
+    color: colors.textSecondary,
+    lineHeight: 22,
   },
   address: {
     fontSize: 15,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 15,
   },
   map: {
     width: '100%',
     height: 200,
-    borderRadius: 10,
+    borderRadius: radii.md,
+    overflow: 'hidden',
   },
   bulletPoint: {
     fontSize: 15,
-    color: '#666',
-    marginBottom: 5,
+    color: colors.textSecondary,
+    marginBottom: 6,
     lineHeight: 22,
   },
-  checkInBadge: {
-    backgroundColor: '#E8F5E9',
-    padding: 15,
-    borderRadius: 10,
+  checkInCard: {
+    backgroundColor: 'rgba(90,75,117,0.08)',
+    padding: 18,
+    borderRadius: radii.md,
     alignItems: 'center',
+    marginBottom: spacing.md,
   },
   checkInText: {
-    color: '#4CAF50',
+    color: colors.accentPurple,
     fontSize: 15,
     fontWeight: '500',
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgCard,
     alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   footerInfo: {
     flex: 1,
   },
   footerHours: {
+    fontFamily: fonts.serif,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '500',
+    color: colors.textPrimary,
   },
   footerCategory: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   bookButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    borderRadius: 10,
+    backgroundColor: colors.accentBlack,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: radii.sm,
   },
   bookButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

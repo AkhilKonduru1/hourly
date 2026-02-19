@@ -9,6 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { mockPendingHours } from '../../data/mockData';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function ManageHoursScreen() {
   const [hours, setHours] = useState(mockPendingHours);
@@ -54,255 +55,287 @@ export default function ManageHoursScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Approve Volunteer Hours</Text>
-        <Text style={styles.subtitle}>
-          {hours.length} pending approval{hours.length !== 1 ? 's' : ''}
-        </Text>
-      </View>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Approve Hours</Text>
+          <Text style={styles.subtitle}>
+            {hours.length} pending approval{hours.length !== 1 ? 's' : ''}
+          </Text>
+        </View>
 
-      <ScrollView style={styles.list}>
-        {hours.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyIcon}>✓</Text>
-            <Text style={styles.emptyTitle}>All Caught Up!</Text>
-            <Text style={styles.emptyText}>
-              No pending hours to approve at this time.
-            </Text>
-          </View>
-        ) : (
-          hours.map((hour) => (
-            <View key={hour.id} style={styles.card}>
-              <View style={styles.cardHeader}>
-                <View style={styles.studentInfo}>
-                  <Text style={styles.studentIcon}>👤</Text>
-                  <View>
-                    <Text style={styles.studentName}>{hour.studentName}</Text>
-                    <Text style={styles.opportunityTitle}>
-                      {hour.opportunityTitle}
+        <ScrollView
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {hours.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyIcon}>✓</Text>
+              <Text style={styles.emptyTitle}>All Caught Up!</Text>
+              <Text style={styles.emptyText}>
+                No pending hours to approve at this time.
+              </Text>
+            </View>
+          ) : (
+            hours.map((hour) => (
+              <View key={hour.id} style={styles.card}>
+                <View style={styles.cardTop}>
+                  <View style={styles.studentRow}>
+                    <View style={styles.studentAvatar}>
+                      <Text style={styles.studentAvatarText}>
+                        {hour.studentName.charAt(0)}
+                      </Text>
+                    </View>
+                    <View style={styles.studentInfo}>
+                      <Text style={styles.studentName}>{hour.studentName}</Text>
+                      <Text style={styles.opportunityTitle}>
+                        {hour.opportunityTitle}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.detailsCard}>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Date</Text>
+                    <Text style={styles.detailValue}>{hour.date}</Text>
+                  </View>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.detailLabel}>Hours</Text>
+                    <Text style={styles.detailValue}>{hour.hours} hours</Text>
+                  </View>
+                  <View style={[styles.detailRow, styles.detailRowLast]}>
+                    <Text style={styles.detailLabel}>Verified by</Text>
+                    <Text style={styles.detailValue}>
+                      {hour.verificationMethod}
                     </Text>
                   </View>
                 </View>
-              </View>
 
-              <View style={styles.cardDetails}>
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>📅 Date:</Text>
-                  <Text style={styles.detailValue}>{hour.date}</Text>
+                <View style={styles.actions}>
+                  <TouchableOpacity
+                    style={styles.rejectButton}
+                    onPress={() => handleReject(hour.id)}
+                  >
+                    <Text style={styles.rejectButtonText}>Reject</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.approveButton}
+                    onPress={() => handleApprove(hour.id)}
+                  >
+                    <Text style={styles.approveButtonText}>Approve</Text>
+                  </TouchableOpacity>
                 </View>
-
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>⏱️ Hours:</Text>
-                  <Text style={styles.detailValue}>{hour.hours} hours</Text>
-                </View>
-
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>✓ Verified by:</Text>
-                  <Text style={styles.detailValue}>{hour.verificationMethod}</Text>
-                </View>
               </View>
+            ))
+          )}
+        </ScrollView>
 
-              <View style={styles.actions}>
-                <TouchableOpacity
-                  style={styles.rejectButton}
-                  onPress={() => handleReject(hour.id)}
-                >
-                  <Text style={styles.rejectButtonText}>✕ Reject</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.approveButton}
-                  onPress={() => handleApprove(hour.id)}
-                >
-                  <Text style={styles.approveButtonText}>✓ Approve</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ))
-        )}
-      </ScrollView>
-
-      {hours.length > 0 && (
-        <View style={styles.footer}>
-          <TouchableOpacity
-            style={styles.bulkApproveButton}
-            onPress={() => {
-              Alert.alert(
-                'Bulk Approve',
-                `Approve all ${hours.length} pending hours?`,
-                [
-                  {
-                    text: 'Approve All',
-                    onPress: () => {
-                      setHours([]);
-                      Alert.alert(
-                        'Success!',
-                        `All ${hours.length} hour submissions approved.`
-                      );
+        {hours.length > 0 && (
+          <View style={styles.footer}>
+            <TouchableOpacity
+              style={styles.bulkApproveButton}
+              onPress={() => {
+                Alert.alert(
+                  'Bulk Approve',
+                  `Approve all ${hours.length} pending hours?`,
+                  [
+                    {
+                      text: 'Approve All',
+                      onPress: () => {
+                        setHours([]);
+                        Alert.alert(
+                          'Success!',
+                          `All ${hours.length} hour submissions approved.`
+                        );
+                      },
                     },
-                  },
-                  { text: 'Cancel', style: 'cancel' },
-                ]
-              );
-            }}
-          >
-            <Text style={styles.bulkApproveText}>
-              Approve All ({hours.length})
-            </Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </SafeAreaView>
+                    { text: 'Cancel', style: 'cancel' },
+                  ]
+                );
+              }}
+            >
+              <Text style={styles.bulkApproveText}>
+                Approve All ({hours.length})
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bgBody,
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
-    backgroundColor: '#fff',
-    padding: 20,
-    paddingTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.sm,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 28,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 6,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
   },
   list: {
     flex: 1,
-    padding: 15,
+  },
+  listContent: {
+    padding: spacing.md,
+    paddingTop: 0,
   },
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
+    paddingVertical: 80,
   },
   emptyIcon: {
-    fontSize: 60,
-    marginBottom: 15,
+    fontSize: 48,
+    color: colors.accentPurple,
+    marginBottom: 16,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontFamily: fonts.serif,
+    fontSize: 22,
+    fontWeight: '400',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 15,
-    color: '#666',
+    color: colors.textSecondary,
     textAlign: 'center',
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
-    borderLeftWidth: 4,
-    borderLeftColor: '#FFC107',
+    backgroundColor: colors.bgCard,
+    borderRadius: radii.md,
+    padding: 20,
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 20,
+    elevation: 2,
   },
-  cardHeader: {
-    marginBottom: 15,
+  cardTop: {
+    marginBottom: 16,
   },
-  studentInfo: {
+  studentRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  studentIcon: {
-    fontSize: 40,
-    marginRight: 12,
+  studentAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.accentPurple,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+  studentAvatarText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  studentInfo: {
+    flex: 1,
   },
   studentName: {
+    fontFamily: fonts.serif,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 3,
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 2,
   },
   opportunityTitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 13,
+    color: colors.textSecondary,
   },
-  cardDetails: {
-    backgroundColor: '#f5f5f5',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
+  detailsCard: {
+    backgroundColor: colors.bgBody,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 16,
   },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 10,
+  },
+  detailRowLast: {
+    marginBottom: 0,
   },
   detailLabel: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 13,
+    color: colors.textSecondary,
   },
   detailValue: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#333',
+    color: colors.textPrimary,
   },
   actions: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 10,
   },
   rejectButton: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: '#F2F2F2',
+    paddingVertical: 14,
+    borderRadius: radii.sm,
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#FF5722',
-    marginRight: 10,
   },
   rejectButtonText: {
-    color: '#FF5722',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: colors.textPrimary,
+    fontSize: 14,
+    fontWeight: '500',
   },
   approveButton: {
     flex: 1,
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: colors.accentBlack,
+    paddingVertical: 14,
+    borderRadius: radii.sm,
     alignItems: 'center',
   },
   approveButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
   },
   footer: {
-    backgroundColor: '#fff',
-    padding: 15,
+    padding: spacing.md,
+    backgroundColor: colors.bgCard,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
+    borderTopColor: colors.border,
   },
   bulkApproveButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: colors.accentPurple,
     padding: 18,
-    borderRadius: 12,
+    borderRadius: radii.sm,
     alignItems: 'center',
   },
   bulkApproveText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

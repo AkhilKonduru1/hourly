@@ -5,13 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
   SafeAreaView,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { mockPendingHours, mockOpportunities } from '../../data/mockData';
-
-const { width } = Dimensions.get('window');
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function OrgDashboardScreen({ navigation }) {
   const { user, logout } = useAuth();
@@ -22,289 +20,312 @@ export default function OrgDashboardScreen({ navigation }) {
   const totalHoursLogged = 234;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Welcome back! 👋</Text>
-          <Text style={styles.orgName}>{user?.name}</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => {
-            /* Settings would go here */
-          }}
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.settingsIcon}>⚙️</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.statsGrid}>
-        <View style={styles.statCard}>
-          <Text style={styles.statIcon}>📋</Text>
-          <Text style={styles.statNumber}>{totalOpportunities}</Text>
-          <Text style={styles.statLabel}>Posted Events</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statIcon}>👥</Text>
-          <Text style={styles.statNumber}>{activeVolunteers}</Text>
-          <Text style={styles.statLabel}>Active Volunteers</Text>
-        </View>
-
-        <View style={[styles.statCard, styles.statCardAlert]}>
-          <Text style={styles.statIcon}>⏳</Text>
-          <Text style={[styles.statNumber, styles.statNumberAlert]}>
-            {pendingApprovals}
-          </Text>
-          <Text style={styles.statLabel}>Pending Approvals</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statIcon}>⏱️</Text>
-          <Text style={styles.statNumber}>{totalHoursLogged}</Text>
-          <Text style={styles.statLabel}>Hours Logged</Text>
-        </View>
-      </View>
-
-      <View style={styles.quickActions}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('PostOpportunity')}
-        >
-          <View style={styles.actionIcon}>
-            <Text style={styles.actionEmoji}>➕</Text>
+          {/* Header */}
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.greeting}>Welcome back</Text>
+              <Text style={styles.orgName}>{user?.name}</Text>
+            </View>
+            <TouchableOpacity style={styles.settingsButton}>
+              <Text style={styles.settingsIcon}>⚙️</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.actionContent}>
-            <Text style={styles.actionTitle}>Post New Opportunity</Text>
-            <Text style={styles.actionSubtitle}>Create a volunteer event</Text>
-          </View>
-          <Text style={styles.actionArrow}>›</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.actionCard, styles.actionCardAlert]}
-          onPress={() => navigation.navigate('ManageHours')}
-        >
-          <View style={[styles.actionIcon, styles.actionIconAlert]}>
-            <Text style={styles.actionEmoji}>✓</Text>
+          {/* Stats Glass Card */}
+          <View style={styles.glassCard}>
+            <View style={styles.statsGrid}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{totalOpportunities}</Text>
+                <Text style={styles.statLabel}>Posted</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{activeVolunteers}</Text>
+                <Text style={styles.statLabel}>Volunteers</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={[styles.statNumber, styles.statAlert]}>
+                  {pendingApprovals}
+                </Text>
+                <Text style={styles.statLabel}>Pending</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{totalHoursLogged}</Text>
+                <Text style={styles.statLabel}>Hours</Text>
+              </View>
+            </View>
           </View>
-          <View style={styles.actionContent}>
-            <Text style={styles.actionTitle}>Approve Hours</Text>
-            <Text style={styles.actionSubtitle}>
-              {pendingApprovals} pending approval
-            </Text>
-          </View>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{pendingApprovals}</Text>
-          </View>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.actionCard}
-          onPress={() => navigation.navigate('Reports')}
-        >
-          <View style={styles.actionIcon}>
-            <Text style={styles.actionEmoji}>📊</Text>
-          </View>
-          <View style={styles.actionContent}>
-            <Text style={styles.actionTitle}>View Reports</Text>
-            <Text style={styles.actionSubtitle}>Export data & analytics</Text>
-          </View>
-          <Text style={styles.actionArrow}>›</Text>
-        </TouchableOpacity>
+          {/* Quick Actions */}
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('PostOpportunity')}
+            >
+              <View style={styles.actionLeft}>
+                <View style={styles.actionDot} />
+                <View style={styles.actionContent}>
+                  <Text style={styles.actionTitle}>Post New Opportunity</Text>
+                  <Text style={styles.actionSubtitle}>Create a volunteer event</Text>
+                </View>
+              </View>
+              <View style={styles.actionArrowContainer}>
+                <Text style={styles.actionArrow}>›</Text>
+              </View>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <View style={styles.actionIcon}>
-            <Text style={styles.actionEmoji}>🏆</Text>
-          </View>
-          <View style={styles.actionContent}>
-            <Text style={styles.actionTitle}>Run Contest</Text>
-            <Text style={styles.actionSubtitle}>Engage your volunteers</Text>
-          </View>
-          <Text style={styles.actionArrow}>›</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Your Recent Opportunities</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAll}>View All</Text>
-          </TouchableOpacity>
-        </View>
-
-        {mockOpportunities.slice(0, 3).map((opp) => (
-          <View key={opp.id} style={styles.oppCard}>
-            <View style={styles.oppHeader}>
-              <Text style={styles.oppTitle}>{opp.title}</Text>
-              {opp.featured && (
-                <View style={styles.featuredBadge}>
-                  <Text style={styles.featuredText}>⭐ Featured</Text>
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('ManageHours')}
+            >
+              <View style={styles.actionLeft}>
+                <View style={[styles.actionDot, styles.actionDotPurple]} />
+                <View style={styles.actionContent}>
+                  <Text style={styles.actionTitle}>Approve Hours</Text>
+                  <Text style={styles.actionSubtitle}>
+                    {pendingApprovals} pending approval
+                  </Text>
+                </View>
+              </View>
+              {pendingApprovals > 0 && (
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{pendingApprovals}</Text>
                 </View>
               )}
-            </View>
-            <Text style={styles.oppDate}>📅 {opp.date}</Text>
-            <View style={styles.oppFooter}>
-              <Text style={styles.oppSpots}>
-                {opp.totalSpots - opp.spotsAvailable}/{opp.totalSpots} filled
-              </Text>
-              <Text style={styles.oppHours}>⏱️ {opp.duration} hrs</Text>
-            </View>
-          </View>
-        ))}
-      </View>
+            </TouchableOpacity>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
-    </SafeAreaView>
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('Reports')}
+            >
+              <View style={styles.actionLeft}>
+                <View style={[styles.actionDot, styles.actionDotBlue]} />
+                <View style={styles.actionContent}>
+                  <Text style={styles.actionTitle}>View Reports</Text>
+                  <Text style={styles.actionSubtitle}>Export data & analytics</Text>
+                </View>
+              </View>
+              <View style={styles.actionArrowContainer}>
+                <Text style={styles.actionArrow}>›</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.actionCard}>
+              <View style={styles.actionLeft}>
+                <View style={[styles.actionDot, { backgroundColor: '#E8D5B7' }]} />
+                <View style={styles.actionContent}>
+                  <Text style={styles.actionTitle}>Run Contest</Text>
+                  <Text style={styles.actionSubtitle}>Engage your volunteers</Text>
+                </View>
+              </View>
+              <View style={styles.actionArrowContainer}>
+                <Text style={styles.actionArrow}>›</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Recent Opportunities */}
+          <Text style={styles.sectionTitle}>Your Recent Opportunities</Text>
+          <View style={styles.feedSection}>
+            {mockOpportunities.slice(0, 3).map((opp) => (
+              <View key={opp.id} style={styles.opportunityCard}>
+                <View style={styles.cardHeader}>
+                  <View style={styles.cardTag}>
+                    <Text style={styles.cardTagText}>{opp.category}</Text>
+                  </View>
+                  {opp.featured && (
+                    <View style={styles.featuredTag}>
+                      <Text style={styles.featuredTagText}>⭐ Featured</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={styles.cardTitle}>{opp.title}</Text>
+                <View style={styles.cardMeta}>
+                  <Text style={styles.cardMetaText}>{opp.date}</Text>
+                  <Text style={styles.cardMetaDot}>•</Text>
+                  <Text style={styles.cardMetaText}>
+                    {opp.totalSpots - opp.spotsAvailable}/{opp.totalSpots} filled
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#2196F3',
-  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bgBody,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
   },
   scrollContent: {
-    paddingBottom: 30,
+    paddingBottom: 100,
   },
   header: {
-    backgroundColor: '#2196F3',
-    padding: 20,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   greeting: {
-    fontSize: 16,
-    color: '#E3F2FD',
+    fontSize: 15,
+    color: colors.textSecondary,
+    marginBottom: 4,
   },
   orgName: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginTop: 5,
+    fontFamily: fonts.serif,
+    fontSize: 24,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
   },
   settingsButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: colors.bgInput,
     alignItems: 'center',
     justifyContent: 'center',
   },
   settingsIcon: {
-    fontSize: 20,
+    fontSize: 18,
+  },
+  glassCard: {
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    backgroundColor: colors.bgCardGlass,
+    borderRadius: radii.lg,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.03,
+    shadowRadius: 40,
+    elevation: 3,
   },
   statsGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 10,
   },
-  statCard: {
-    backgroundColor: '#fff',
-    width: (width - 40) / 2,
-    margin: 5,
-    padding: 20,
-    borderRadius: 12,
+  statItem: {
+    flex: 1,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statCardAlert: {
-    borderWidth: 2,
-    borderColor: '#FFC107',
-  },
-  statIcon: {
-    fontSize: 32,
-    marginBottom: 10,
   },
   statNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#2196F3',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 24,
+    fontWeight: '500',
+    color: colors.textPrimary,
+    marginBottom: 4,
   },
-  statNumberAlert: {
-    color: '#FFC107',
+  statAlert: {
+    color: colors.accentPurple,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#666',
-    textAlign: 'center',
-  },
-  quickActions: {
-    padding: 15,
+    fontSize: 11,
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   sectionTitle: {
+    fontFamily: fonts.serif,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 15,
+    color: colors.textPrimary,
+    paddingHorizontal: spacing.md,
+    marginBottom: 12,
+    marginTop: 8,
+  },
+  actionsContainer: {
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   actionCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgCard,
+    borderRadius: radii.md,
+    padding: 16,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 1,
   },
-  actionCardAlert: {
-    borderLeftWidth: 4,
-    borderLeftColor: '#FFC107',
-  },
-  actionIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#E3F2FD',
+  actionLeft: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 15,
+    flex: 1,
+    gap: 14,
   },
-  actionIconAlert: {
-    backgroundColor: '#FFF9C4',
+  actionDot: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.accentPink,
+    opacity: 0.7,
   },
-  actionEmoji: {
-    fontSize: 24,
+  actionDotPurple: {
+    backgroundColor: colors.accentPurple,
+    opacity: 0.3,
+  },
+  actionDotBlue: {
+    backgroundColor: colors.accentBlue,
+    opacity: 0.5,
   },
   actionContent: {
     flex: 1,
   },
   actionTitle: {
+    fontFamily: fonts.serif,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '500',
+    color: colors.textPrimary,
     marginBottom: 2,
   },
   actionSubtitle: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
+  },
+  actionArrowContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F2F2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   actionArrow: {
-    fontSize: 28,
-    color: '#ccc',
+    fontSize: 18,
+    color: colors.textSecondary,
   },
   badge: {
-    backgroundColor: '#FFC107',
+    backgroundColor: colors.accentPurple,
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -312,86 +333,86 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   badgeText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
-  section: {
-    padding: 15,
+  feedSection: {
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  viewAll: {
-    fontSize: 14,
-    color: '#2196F3',
-    fontWeight: '500',
-  },
-  oppCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
+  opportunityCard: {
+    backgroundColor: colors.bgCard,
+    borderRadius: radii.md,
+    padding: 20,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.03)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 20,
     elevation: 2,
   },
-  oppHeader: {
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  oppTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#333',
-    flex: 1,
+  cardTag: {
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radii.sm,
   },
-  featuredBadge: {
-    backgroundColor: '#FFC107',
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 10,
+  cardTagText: {
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    color: colors.textSecondary,
   },
-  featuredText: {
+  featuredTag: {
+    backgroundColor: colors.accentPurple,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radii.sm,
+  },
+  featuredTagText: {
     fontSize: 10,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
-  oppDate: {
-    fontSize: 13,
-    color: '#666',
+  cardTitle: {
+    fontFamily: fonts.serif,
+    fontSize: 18,
+    color: colors.textPrimary,
     marginBottom: 8,
   },
-  oppFooter: {
+  cardMeta: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 8,
   },
-  oppSpots: {
+  cardMetaText: {
     fontSize: 13,
-    color: '#2196F3',
-    fontWeight: '500',
+    color: colors.textSecondary,
   },
-  oppHours: {
+  cardMetaDot: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   logoutButton: {
-    backgroundColor: '#FF5722',
-    margin: 15,
+    marginHorizontal: spacing.md,
+    backgroundColor: '#F2F2F2',
     padding: 18,
-    borderRadius: 12,
+    borderRadius: radii.sm,
     alignItems: 'center',
+    marginBottom: spacing.lg,
   },
   logoutText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    color: colors.textPrimary,
+    fontSize: 15,
+    fontWeight: '500',
   },
 });

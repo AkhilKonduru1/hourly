@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function UserTypeSelection({ route }) {
   const { email, password, name, isLogin } = route.params;
@@ -19,6 +20,9 @@ export default function UserTypeSelection({ route }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.auraPink} />
+      <View style={styles.auraBlue} />
+
       <View style={styles.content}>
         <Text style={styles.title}>I am a...</Text>
         <Text style={styles.subtitle}>Select your account type</Text>
@@ -69,64 +73,92 @@ export default function UserTypeSelection({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgBody,
+  },
+  auraPink: {
+    position: 'absolute',
+    bottom: '10%',
+    left: '-10%',
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: colors.accentPink,
+    opacity: 0.3,
+  },
+  auraBlue: {
+    position: 'absolute',
+    top: '10%',
+    right: '-10%',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: colors.accentBlue,
+    opacity: 0.2,
   },
   content: {
     flex: 1,
     paddingHorizontal: 30,
-    paddingTop: 60,
+    paddingTop: 80,
   },
   title: {
+    fontFamily: fonts.serif,
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 5,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
+    marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: 15,
+    color: colors.textSecondary,
     marginBottom: 40,
   },
   typeCard: {
-    backgroundColor: '#f5f5f5',
-    padding: 25,
-    borderRadius: 15,
-    marginBottom: 20,
+    backgroundColor: colors.bgCard,
+    padding: 24,
+    borderRadius: radii.md,
+    marginBottom: 16,
     borderWidth: 2,
-    borderColor: '#e0e0e0',
+    borderColor: 'rgba(0,0,0,0.03)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 20,
+    elevation: 2,
   },
   typeCardSelected: {
-    borderColor: '#4CAF50',
-    backgroundColor: '#E8F5E9',
+    borderColor: colors.accentPurple,
+    backgroundColor: '#F8F5FF',
   },
   typeEmoji: {
-    fontSize: 40,
-    marginBottom: 10,
+    fontSize: 36,
+    marginBottom: 12,
   },
   typeTitle: {
+    fontFamily: fonts.serif,
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '500',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   typeDescription: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 20,
   },
   continueButton: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: colors.accentBlack,
+    padding: 16,
+    borderRadius: radii.sm,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 24,
   },
   continueButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#CCCCCC',
   },
   continueButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

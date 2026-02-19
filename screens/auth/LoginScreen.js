@@ -7,9 +7,9 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Image,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { colors, spacing, radii, fonts } from '../../theme';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -18,63 +18,89 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = () => {
     if (email && password) {
-      // For demo purposes, we'll navigate to user type selection
-      // In a real app, the user type would be determined by the backend
       navigation.navigate('UserTypeSelection', { email, password, isLogin: true });
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <View style={styles.content}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logo}>⏱️</Text>
-          <Text style={styles.appName}>Hourly</Text>
-          <Text style={styles.tagline}>Track. Volunteer. Grow.</Text>
+    <View style={styles.container}>
+      <View style={styles.auraPink} />
+      <View style={styles.auraBlue} />
+
+      <KeyboardAvoidingView
+        style={styles.inner}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.content}>
+          <View style={styles.logoContainer}>
+            <Text style={styles.appName}>Hourly</Text>
+            <Text style={styles.tagline}>Track. Volunteer. Grow.</Text>
+          </View>
+
+          <View style={styles.form}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor={colors.textTertiary}
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              placeholderTextColor={colors.textTertiary}
+            />
+
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+              <Text style={styles.loginButtonText}>Log In</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+              <Text style={styles.signupText}>
+                Don't have an account?{' '}
+                <Text style={styles.signupLink}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            placeholderTextColor="#999"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor="#999"
-          />
-
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Log In</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.signupText}>
-              Don't have an account? <Text style={styles.signupLink}>Sign Up</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bgBody,
+  },
+  auraPink: {
+    position: 'absolute',
+    top: '10%',
+    left: '-10%',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: colors.accentPink,
+    opacity: 0.35,
+  },
+  auraBlue: {
+    position: 'absolute',
+    top: '5%',
+    right: '-15%',
+    width: 280,
+    height: 280,
+    borderRadius: 140,
+    backgroundColor: colors.accentBlue,
+    opacity: 0.25,
+  },
+  inner: {
+    flex: 1,
   },
   content: {
     flex: 1,
@@ -85,53 +111,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 50,
   },
-  logo: {
-    fontSize: 80,
-    marginBottom: 10,
-  },
   appName: {
-    fontSize: 42,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-    marginBottom: 5,
+    fontFamily: fonts.serif,
+    fontSize: 48,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    letterSpacing: -1,
+    marginBottom: 8,
   },
   tagline: {
-    fontSize: 16,
-    color: '#666',
-    fontStyle: 'italic',
+    fontSize: 15,
+    color: colors.textSecondary,
+    letterSpacing: 0.5,
   },
   form: {
     width: '100%',
   },
   input: {
-    backgroundColor: '#f5f5f5',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    backgroundColor: colors.bgInput,
+    padding: 16,
+    borderRadius: radii.sm,
+    marginBottom: 14,
+    fontSize: 15,
+    color: colors.textPrimary,
   },
   loginButton: {
-    backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: colors.accentBlack,
+    padding: 16,
+    borderRadius: radii.sm,
     alignItems: 'center',
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   loginButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
   signupText: {
     textAlign: 'center',
-    color: '#666',
+    color: colors.textSecondary,
     fontSize: 14,
   },
   signupLink: {
-    color: '#4CAF50',
-    fontWeight: 'bold',
+    color: colors.accentPurple,
+    fontWeight: '600',
   },
 });

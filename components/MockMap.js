@@ -79,7 +79,7 @@ export default function MockMap({ style, region, children }) {
             var annotation = new mapkit.MarkerAnnotation(coordinate, {
               title: marker.title,
               subtitle: marker.description,
-              color: "#4CAF50",
+              color: "#5A4B75",
               glyphText: "📍"
             });
             
@@ -138,7 +138,7 @@ export default function MockMap({ style, region, children }) {
         startInLoadingState={true}
         renderLoading={() => (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#4CAF50" />
+            <ActivityIndicator size="large" color="#5A4B75" />
           </View>
         )}
         onError={(syntheticEvent) => {
